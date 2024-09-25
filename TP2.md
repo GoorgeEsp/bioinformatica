@@ -53,7 +53,7 @@ print(encontrar_promotores(archivo_dna))
 
 #### DESAFÍO IV: Juego RPG interactivo
 ```
-def juego_expresion_genica():
+def juego():
     print("¡Bienvenido al juego de la vida")
     print("Eres una célula eucariota que busca generar una proteína")
     
@@ -70,5 +70,5 @@ def juego_expresion_genica():
         if continuar.lower() != 'si':
             break
 
-juego_expresion_genica()
+juego()
 ```
