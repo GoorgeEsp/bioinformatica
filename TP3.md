@@ -75,15 +75,24 @@ print("Posiciones de la caja TATA:", buscar_caja_tata(secuencia_dna))
 
 ### DESAFÍO IV
 ```python
+import time
+import random
+
+def imprimir_con_retraso(texto, retraso=1):
+    """Imprime el texto con un retraso entre líneas para crear efecto de narrativa."""
+    for linea in texto.split('\n'):
+        print(linea)
+        time.sleep(retraso)
+
 def inicio_juego():
     imprimir_con_retraso("""
     🧬 Bienvenido al Juego de la Expresión Génica RPG 🧬
     En este juego, eres una célula que debe completar la expresión génica.
     Tu misión es transformar la información en el ADN en una proteína funcional.
-
+    
     Para ganar, tendrás que superar varias fases: transcribir el ADN, salir del núcleo,
     y traducir el ARN en una cadena de aminoácidos.
-
+    
     ¡Buena suerte, héroe molecular! 🚀
     """, 1.5)
 
@@ -93,20 +102,25 @@ def fase1_transcripcion():
     Estás en el núcleo celular. Aquí, el ADN contiene todas las instrucciones necesarias.
     Para comenzar, debes transcribir una cadena de ADN en ARN mensajero (ARNm).
     
-    """, 1.2)
-
-    # Desafío al jugador
-    respuesta = input("¿Quieres transcribir el ADN a ARN? (sí/no): ").strip().lower()
-    if respuesta == "sí":
+    Te proporciono una secuencia de ADN: 'ATGCATGC'
+    Recuerda que la transcripción convierte:
+    - A -> U
+    - T -> A
+    - G -> C
+    - C -> G
+    """, 1.5)
+    
+    secuencia_adn = "ATGCATGC"
+    respuesta = input(f"¿Cuál sería la secuencia de ARN correspondiente a {secuencia_adn}? Escribe tu respuesta: ").upper()
+    
+    if respuesta == "UACGUACG":
         imprimir_con_retraso("""
-        💥 ¡Éxito! Has transcrito el ADN en ARN mensajero (ARNm).
-        Ahora, tienes una copia de la información genética en una molécula de ARN
-        lista para salir del núcleo.
+        💥 ¡Correcto! Has transcrito el ADN en ARN mensajero.
+        Ahora, el ARN está listo para salir del núcleo y ser traducido.
         """, 1)
     else:
         imprimir_con_retraso("""
-        ❌ Has decidido no transcribir el ADN. La expresión génica no puede continuar sin este paso.
-        ¡Inténtalo de nuevo!
+        ❌ La secuencia de ARN no es correcta. Intenta de nuevo.
         """)
         fase1_transcripcion()  # Reintenta la fase
 
@@ -119,8 +133,8 @@ def fase2_salida_nucleo():
     """, 1.2)
 
     # Desafío al jugador
-    respuesta = input("¿Estás listo para salir del núcleo? (sí/no): ").strip().lower()
-    if respuesta == "sí":
+    respuesta = input("Escribe 'salir' para llevar el ARN al citoplasma: ").strip().lower()
+    if respuesta == "salir":
         imprimir_con_retraso("""
         🌊 ¡Bien hecho! El ARNm ha salido del núcleo y ha llegado al citoplasma.
         Ahora está listo para la traducción en los ribosomas.
@@ -138,32 +152,88 @@ def fase3_traduccion():
     Ahora el ARNm se encuentra en el citoplasma, y los ribosomas están listos
     para decodificar la información en una secuencia de aminoácidos.
 
-    Para traducir la información, cada triplete de nucleótidos (codón) del ARNm se convierte en un aminoácido.
-    Este es el momento clave para formar una proteína funcional.
+    Cada triplete de nucleótidos (codón) en el ARNm se convierte en un aminoácido.
+
+    Te damos una secuencia de ARN: 'AUGUUUAG'
+    Usa el código genético para traducirla en una cadena de aminoácidos.
     """, 1.5)
 
-    # Desafío de traducción
-    respuesta = input("¿Quieres comenzar la traducción del ARNm? (sí/no): ").strip().lower()
-    if respuesta == "sí":
+    secuencia_arn = "AUGUUUAG"
+    respuesta = input(f"Traduce la secuencia {secuencia_arn} en una cadena de aminoácidos (usa los nombres de aminoácidos como Met, Phe, etc.): ").capitalize()
+    
+    if respuesta == "Met-Phe-Stop":
         imprimir_con_retraso("""
-        🎉 ¡Felicitaciones! Los ribosomas han traducido la secuencia de ARNm en una proteína.
-        Has completado exitosamente el proceso de expresión génica.
-        
-        🏆 ¡Has ganado el juego! Ahora eres un experto en expresión génica.
+        🎉 ¡Correcto! Has traducido la secuencia de ARN en la proteína correcta.
+        La secuencia es Met-Phe-Stop, lo que indica el comienzo y final de la proteína.
         """, 1)
     else:
         imprimir_con_retraso("""
-        ❌ Sin traducción, no se puede crear una proteína. 
-        ¡Intenta de nuevo para completar el proceso de expresión génica!
+        ❌ La traducción no es correcta. Intenta de nuevo.
         """)
         fase3_traduccion()  # Reintenta la fase
+
+def fase4_empalme_arn():
+    imprimir_con_retraso("""
+    === Fase 4: Empalme de ARN (Splicing) ===
+    El ARN transcrito contiene partes no codificantes llamadas **intrones**.
+    Estas partes deben ser eliminadas para que el ARN funcional solo contenga **exones**.
+
+    Aquí está tu ARN con intrones: 'AUGGUCUUAGGAAGCGAAUUUUGAGUGGAUCUAAGUAGGA'
+    Elimina los intrones (UAA, UAG, UGA).
+    """, 1.5)
+
+    arn_con_intrones = "AUGGUCUUAGGAAGCGAAUUUUGAGUGGAUCUAAGUAGGA"
+    print(f"Secuencia de ARN original con intrones: {arn_con_intrones}")
+
+    # Eliminar los intrones (codones de terminación)
+    arn_sin_intrones = arn_con_intrones.replace("UAA", "").replace("UAG", "").replace("UGA", "")
+    print(f"Secuencia de ARN sin intrones: {arn_sin_intrones}")
+
+    respuesta = input("Escribe la secuencia de ARN sin intrones: ").upper()
+    if respuesta == arn_sin_intrones:
+        imprimir_con_retraso("""
+        💥 ¡Correcto! Has eliminado los intrones y ahora el ARN está listo para ser traducido.
+        """, 1)
+    else:
+        imprimir_con_retraso("""
+        ❌ La secuencia no es correcta. Los intrones no han sido eliminados adecuadamente. ¡Inténtalo de nuevo!
+        """)
+        fase4_empalme_arn()  # Reintenta la fase
+
+def fase5_modificacion_adn():
+    imprimir_con_retraso("""
+    === Fase 5: Modificación de ADN ===
+    El ADN tiene secuencias que codifican proteínas específicas. A veces, las células necesitan modificar
+    estas secuencias para adaptarse a nuevas situaciones o cambiar la proteína que están produciendo.
+
+    Aquí está tu secuencia de ADN original: 'ATGCGTAC'
+    Cambia una base para que obtengas una secuencia que codifique para la proteína 'Met-Ser-Stop'.
+    Recuerda, A -> U, T -> A, G -> C, C -> G.
+    """, 1.5)
+
+    secuencia_adn_original = "ATGCGTAC"
+    respuesta = input(f"¿Cómo cambiarías la secuencia {secuencia_adn_original} para que se codifique la proteína 'Met-Ser-Stop'? ").upper()
+    
+    if respuesta == "ATGAGTAC":
+        imprimir_con_retraso("""
+        🎉 ¡Bien hecho! Has modificado correctamente la secuencia de ADN.
+        El cambio ha permitido obtener la proteína 'Met-Ser-Stop'.
+        """, 1)
+    else:
+        imprimir_con_retraso("""
+        ❌ La modificación no es correcta. ¡Inténtalo de nuevo!
+        """)
+        fase5_modificacion_adn()  # Reintenta la fase
 
 def jugar():
     inicio_juego()
     fase1_transcripcion()
     fase2_salida_nucleo()
     fase3_traduccion()
+    fase4_empalme_arn()
+    fase5_modificacion_adn()
 
-# Ejecutar el juego
+# Inicia el juego
 jugar()
+
 ```
